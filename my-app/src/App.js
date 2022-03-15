@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
-function App() {
+const url = 'https://api.github.com/users';
+
+// second argument
+
+const UseEffectFetchData = () => {
+  const [users, setUsers] = useState([]);
+
+  const getUsers = async () => {
+    const response = await fetch(url);
+    const users = await response.json();
+    setUsers(users);
+    // console.log(users);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h3>github users</h3>
+      <ul className='users'>
+        {users.map((user) => {
+          const { id, login, avatar_url, html_url } = user;
+          return (
+            <li key={id}>
+              <img src={avatar_url} alt={login} />
+              <div>
+                <h4>{login}</h4>
+                <a href={html_url}>profile</a>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
-}
+};
 
-export default App;
+export default UseEffectFetchData;
